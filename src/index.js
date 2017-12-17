@@ -5,10 +5,10 @@ import Teams from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import {Provider} from 'mobx-react';
-import TeamStore from './stores/TeamStore'
+import TeamsStore from './stores/TeamStore'
 
 const Root = (
-    <Provider TeamStore={TeamStore}>
+    <Provider TeamsStore={TeamsStore}>
         <Teams/>
     </Provider>
 );

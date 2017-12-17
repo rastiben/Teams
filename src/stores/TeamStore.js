@@ -14,7 +14,9 @@ class TeamsStore{
     }
 
     setTeams(teams){
-        this.Teams = teams;
+        this.Teams = teams.map((team,i) =>
+            new TeamStore(team.name,i)
+        );
     }
 
 }
@@ -23,8 +25,14 @@ class TeamStore{
 
     @observable name;
     
-    constructor(name){
+    constructor(name,id){
         this.name = name;
+        this.id = id;
+    }
+
+    @action changeName = (name) => {
+        this.name = name;
+        socket.emit('changeTeamName',{id:this.id,name:this.name});
     }
 
 }

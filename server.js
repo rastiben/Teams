@@ -1,16 +1,23 @@
 const io = require('socket.io')();
 
+var teams = [
+    {
+        name : 'Team 1'
+    },{
+        name : 'Team 2'
+    }
+];
+
 io.on('connection', (client) => {
     client.on('getTeams', () => {
-        var teams = [
-            {
-                name : 'Team 1'
-            },{
-                name : 'Team 2'
-            }
-        ]
         client.emit('teams', teams);
     });
+
+    client.on('changeTeamName', (data) => {
+        teams[data.id].name = data.name;
+        io.emit('teams', teams);
+    });
+
 });
 
 const port = 8000;

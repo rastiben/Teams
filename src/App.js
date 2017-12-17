@@ -4,40 +4,50 @@ import './App.css';
 
 import {inject, observer} from 'mobx-react';
 
-@inject('TeamStore')
+@inject('TeamsStore')
 @observer
 class Teams extends Component {
+  
+  constructor(props) {
+    super(props);
+
+    this.state = { manage: false }
+
+  }
+
+  changeState(event) {
+
+    this.setState({manage:event.target.checked});
+
+  }
+
   render() {
 
-    const TeamStore = this.props.TeamStore;
+    const TeamsStore = this.props.TeamsStore;
 
-    const listTeams = TeamStore.Teams.map((team,i) =>
+    const listTeams = TeamsStore.Teams.map((team,i) =>
       <Team key={i} team={team}></Team>
     );
+
+    const listManageTeams = TeamsStore.Teams.map((team,i) =>
+      <ManageTeam key={i} team={team}></ManageTeam>
+    );
+    
+    const render = this.state.manage ? listManageTeams : listTeams;
 
     return (
       <div className="Teams">
 
-        {TeamStore.time}
+        <input type="checkbox" onChange={this.changeState.bind(this)} />
 
-        {listTeams}
-
+        {render}
+        
       </div>
     );
   }
 }
 
-@inject('TeamStore')
-@observer
 class Team extends Component{
-
-    changeTeamName(name){
-      this.props.team.name = name;
-    }
-
-    onChange (event) {
-      this.changeTeamName(event.target.value)
-    }
 
     render(){
 
@@ -45,7 +55,26 @@ class Team extends Component{
 
       <div className="Team">
         <h1>Team 1 : {this.props.team.name}</h1>
-        <input type="text" value={this.props.team.name} onChange={this.onChange.bind(this)}/>
+      </div>
+
+      );
+
+    }
+
+}
+
+class ManageTeam extends Component{
+
+    changeTeamName(event){
+      this.props.team.changeName(event.target.value);
+    }
+
+    render(){
+
+      return(
+
+      <div className="Team">
+        <input type="text" value={this.props.team.name} onChange={this.changeTeamName.bind(this)}/>
       </div>
 
       );
